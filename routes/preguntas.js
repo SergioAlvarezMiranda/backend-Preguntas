@@ -1,7 +1,7 @@
-// const express = require("express");
-// const router = express.Router();
-// const { obtenerPreguntas } = require("../controllers/preguntasController");
+const express = require("express");
+const router = express.Router();
+const { obtenerPreguntas } = require("../controllers/preguntasController");
 
-// router.get("/", obtenerPreguntas);
+router.get("/", obtenerPreguntas);
 
-// module.exports = router;
+module.exports = router;
