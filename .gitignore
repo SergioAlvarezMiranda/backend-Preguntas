@@ -7,7 +7,7 @@ yarn.lock
 
 # Entorno
 .env
-
+dbConexion.js
 # Logs
 *.log
 
