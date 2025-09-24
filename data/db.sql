@@ -56,6 +56,19 @@ JOIN card_etiquetas ce ON c.id = ce.card_id
 JOIN etiquetas e ON ce.etiqueta_id = e.id
 GROUP BY c.id;
 
+
+ALTER TABLE etiquetas
+ADD CONSTRAINT etiquetas_nombre_unique UNIQUE (nombre);
+
+
+-- Validar el nombre en la tabla etiquetas - evitar duplicados
+CREATE EXTENSION IF NOT EXISTS citext; 
+ALTER TABLE etiquetas ALTER COLUMN nombre TYPE citext;
+
+INSERT INTO etiquetas (nombre) values ('PHP');
+
+DELETE FROM etiquetas WHERE ID = '4';
+
 -- Verificar tablas simples
 SELECT * FROM cards;
 SELECT * FROM etiquetas;
