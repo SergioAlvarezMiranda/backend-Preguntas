@@ -22,7 +22,7 @@ Thumbs.db
 # Bases de datos locales
 *.sqlite
 *.db
-
+*db.sql
 
 # Carpetas de producción/build (si llegas a compilar frontend)
 dist/
