@@ -6,7 +6,7 @@ class CardService {
     // Listar todas las cards
     async listar() {
         try {
-            const result = await pool.query("SELECT c.id, c.pregunta, c.respuesta, JSON_AGG(e.nombre) AS etiquetas FROM cards c LEFT JOIN card_etiquetas ce ON c.id = ce.card_id LEFT JOIN etiquetas e ON ce.etiqueta_id = e.id GROUP BY c.id, c.pregunta, c.respuesta;");
+            const result = await pool.query("SELECT * FROM listar_cards();");
             return result.rows;
         } catch (error) {
             console.error("Error al listar cards:", error);
@@ -17,16 +17,7 @@ class CardService {
     async listarPorEtiqueta(nombreEtiqueta) {
         try {
             const result = await pool.query(`
-                SELECT 
-                    c.id, 
-                    c.pregunta, 
-                    c.respuesta, 
-                    COALESCE(JSON_AGG(e.nombre) FILTER (WHERE e.nombre IS NOT NULL), '[]') AS etiquetas
-                FROM cards c
-                INNER JOIN card_etiquetas ce ON c.id = ce.card_id
-                INNER JOIN etiquetas e ON ce.etiqueta_id = e.id
-                WHERE e.nombre = $1
-                GROUP BY c.id, c.pregunta, c.respuesta;
+               SELECT * FROM listar_cards_por_etiqueta($1);
             `, [nombreEtiqueta]);
             return result.rows;
         } catch (error) {
@@ -37,11 +28,11 @@ class CardService {
 
 
     // Crear una card
-    async crear(pregunta, respuesta) {
+    async crear(pregunta, respuesta, etiquetas) {
         try {
             const result = await pool.query(
-                "INSERT INTO cards (pregunta, respuesta) VALUES ($1, $2) RETURNING *;",
-                [pregunta, respuesta]
+                "SELECT * FROM crear_card($1, $2, $3);",
+                [pregunta, respuesta, etiquetas]
             );
             return result.rows[0];
         } catch (error) {
@@ -68,7 +59,7 @@ class CardService {
     async eliminar(id) {
         try {
             const result = await pool.query(
-                "DELETE FROM cards WHERE id = $1 RETURNING *;",
+                "SELECT * FROM eliminar_card($1);",
                 [id]
             );
             return result.rows[0];

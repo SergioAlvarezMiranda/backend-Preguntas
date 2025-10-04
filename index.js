@@ -13,7 +13,7 @@ app.use("/api/preguntas", preguntasRoutes);
 
 // Ruta raíz de prueba
 app.get("/", (req, res) => {
-    res.json({ 
+    res.json({
         message: "¡Servidor funcionando correctamente!",
         api: "Visita /api/preguntas para usar la API"
     });
@@ -24,4 +24,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`📡 API disponible en http://localhost:${PORT}/api/preguntas`);
+
 });
+
+
