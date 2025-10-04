@@ -67,14 +67,25 @@ class CardService {
     // Eliminar una card
     async eliminar(id) {
         try {
-            const result = await pool.query(
-                "DELETE FROM cards WHERE id = $1 RETURNING *;",
-                [id]
-            );
-            return result.rows[0];
+            const query = "DELETE FROM cards WHERE id = $1 RETURNING *;";
+            const result = await pool.query(query, [id]); // ✅ Pasa [id] como segundo parámetro
+
+            // Retorna solo datos serializables
+            if (result.rows.length > 0) {
+                return {
+                    success: true,
+                    message: "Card eliminada",
+                    data: result.rows[0]
+                };
+            } else {
+                return {
+                    success: false,
+                    message: "Card no encontrada"
+                };
+            }
         } catch (error) {
-            console.error("Error al eliminar card:", error);
-            throw error;
+            console.error("Error al eliminar card:", error.message); // ✅ Solo el mensaje
+            throw new Error(error.message); // ✅ Lanza solo el mensaje
         }
     }
 }
