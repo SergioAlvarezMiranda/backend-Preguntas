@@ -24,9 +24,9 @@ class EtiquetaService {
 */
     async buscarEtiqueta(nombreEtiqueta) {
         try {
-            const query = "SELECT * FROM etiquetas WHERE nombre = $1;";
+            const query = "SELECT id FROM etiquetas WHERE nombre = $1;";
             const result = await pool.query(query, [nombreEtiqueta]);
-            return result.rows || null;
+            return result || null;
         } catch (error) {
             console.error("Error al buscar la etiqueta:", error);
             throw error;
@@ -35,7 +35,6 @@ class EtiquetaService {
 
     /**
 * verifica si una etiqueta ya existe.
-*
 * @param {string} nombreEtiqueta - Nombre de la etiqueta a verificar.
 * @returns {Promise<Object|string>} - Devuelve un true si existe false si no existe la etiqueta.
 * @throws {Error} - Lanza un error si la operación con la base de datos falla.
@@ -71,6 +70,34 @@ class EtiquetaService {
 
         } catch (error) {
             console.error("Error al crear card:", error);
+            throw error;
+        }
+    }
+
+
+    async agregarSiExiste(nombreEtiqueta, idNuevaTarjeta) {
+        try {
+            // Buscamos la etiqueta
+            const result = await this.buscarEtiqueta(nombreEtiqueta);
+
+            if (!result || result.rows.length === 0) {
+                throw new Error(`La etiqueta "${nombreEtiqueta}" no existe`);
+            }
+
+            const idEtiqueta = result.rows[0].id;
+
+            // Insertamos en la tabla intermedia
+            const query = `
+            INSERT INTO card_etiquetas (card_id, etiqueta_id) 
+            VALUES ($1, $2) 
+            RETURNING *;
+        `;
+
+            const insertResult = await pool.query(query, [idNuevaTarjeta, idEtiqueta]);
+
+            return insertResult.rows[0];
+        } catch (error) {
+            console.error("Error al agregar etiqueta existente a la tarjeta:", error);
             throw error;
         }
     }
