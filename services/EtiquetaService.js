@@ -1,4 +1,4 @@
-const pool = require("./dbConexion");
+const pool = require("../dbConexion");
 
 class EtiquetaService {
     constructor() { }
