@@ -100,7 +100,6 @@ LANGUAGE plpgsql;
 
 
 
-
 CREATE OR REPLACE FUNCTION listar_cards_por_etiqueta(nombre_etiqueta TEXT)
 RETURNS TABLE (
     id INT,
