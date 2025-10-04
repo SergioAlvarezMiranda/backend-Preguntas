@@ -1,11 +1,29 @@
-// index.js
-const http = require('http');
+const express = require("express");
+const cors = require("cors");
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('¡Hola Mundo desde Node.js!');
+const preguntasRoutes = require("./routes/preguntas");
+
+const app = express();
+
+// Middlewares
+app.use(cors());
+app.use(express.json());
+
+// Rutas
+app.use("/api/preguntas", preguntasRoutes);
+
+// Ruta raíz de prueba
+app.get("/", (req, res) => {
+    res.json({
+        message: "¡Servidor funcionando correctamente!",
+        api: "Visita /api/preguntas para usar la API"
+    });
 });
 
-server.listen(3000, () => {
-    console.log('Servidor escuchando en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`📡 API disponible en http://localhost:${PORT}/api/preguntas`);
+
 });
