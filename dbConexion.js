@@ -8,11 +8,8 @@ const pool = new Pool({
   password: 'admin'
 });
 
-pool.connect()
-  .then(client => {
-    console.log('✅ Conexión exitosa a PostgreSQL');
-    client.release();
-  })
-  .catch(err => console.error('❌ Error de conexión', err.stack));
+// Compatibilidad: reexportamos el pool central desde db/index.js
+const db = require('./db');
 
-module.exports = pool;
+// Exporta la interfaz antigua (pool) y también una función query
+module.exports = db.pool || db;
