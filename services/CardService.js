@@ -65,7 +65,6 @@ class CardService {
             return result.rows[0];
         } catch (error) {
             console.error("Error al eliminar card:", error);
-            throw error;
         }
     }
 }

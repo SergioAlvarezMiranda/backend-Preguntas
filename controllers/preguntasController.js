@@ -38,13 +38,19 @@ const obtenerPreguntas = async (req, res) => {
 }
 
 
-const EliminarPregunta = async (id) => {
+// preguntasController.js
+const eliminarPregunta = async (req, res) => {
+    const { id } = req.params;
     try {
         const resultado = await CardService.eliminar(id);
-        return resultado;
+        res.status(resultado.success ? 200 : 404).json(resultado);
     } catch (error) {
-        console.error("Error en eliminarPregunta:", error);
-        throw error;
+        res.status(500).json({
+            success: false,
+            message: "Ocurrió un error eliminando la pregunta",
+            error: error.message,
+            data: null
+        });
     }
 };
 
@@ -104,5 +110,5 @@ const crearPregunta = async (req, res) => {
 const EditarPregunta = async (pregunta) => {
 };
 
-module.exports = { obtenerPreguntas, crearPregunta, EliminarPregunta };
+module.exports = { obtenerPreguntas, crearPregunta, eliminarPregunta };
 
