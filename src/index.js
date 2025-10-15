@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const config = require('../config');
 
-const preguntasRoutes = require("./routes/preguntas");
+const preguntasRoutes = require("./routes/preguntas.routes");
 
 const app = express();
 
